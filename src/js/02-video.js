@@ -1,10 +1,33 @@
+import throttle from "lodash.throttle";
+
 const iframe = document.querySelector('iframe');
 const player = new Vimeo.Player(iframe);
 
-player.on('play', function () {
-    console.log('played the video!');
+
+player.on('timeupdate', function (data) {
+    let currentTime = data.seconds;
+
+    saveCurrentTimeToLocalStorageThrottled(currentTime);
 });
 
-player.getVideoTitle().then(function (title) {
-    console.log('title:', title);
+
+addEventListener('load', function () {
+    const savedTime = localStorage.getItem('videoplayer-current-time');
+
+    if (savedTime !== null) {
+        const currentTime = parseFloat(savedTime);
+
+        player.setCurrentTime(currentTime)
+            .then(function (seconds) {
+
+            })
+    }
 });
+
+
+const saveCurrentTimeToLocalStorageThrottled = throttle(function (currentTime) {
+    localStorage.setItem("videoplayer-current-time", currentTime.toString());
+}, 1000);
+
+
+
