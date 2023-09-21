@@ -16,14 +16,10 @@ addEventListener('load', function () {
 
     if (savedTime !== null) {
         const currentTime = parseFloat(savedTime);
+        player.setCurrentTime(currentTime || 0)
 
-        player.setCurrentTime(currentTime)
-            .then(function (seconds) {
-
-            })
     }
 });
-
 
 const saveCurrentTimeToLocalStorageThrottled = throttle(function (currentTime) {
     localStorage.setItem("videoplayer-current-time", currentTime.toString());
